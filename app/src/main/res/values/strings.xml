@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Kemah</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email_hint">user@kemah.com</string>
+    <string name="pass_hint">Your secret password</string>
+    <string name="username">Username / Email Address</string>
+    <string name="password">Password</string>
+</resources>
