@@ -6,4 +6,16 @@
     <string name="pass_hint">Your secret password</string>
     <string name="username">Username / Email Address</string>
     <string name="password">Password</string>
+    <string name="campground_name">Campground Name</string>
+    <string name="campground_location">Campground Location</string>
+    <string name="campground_address">Campground Address</string>
+    <string name="campground_price">Campground Price</string>
+    <string name="campground_image_url">Campground Image URL</string>
+    <string name="campground_image_description">Campground Illustration</string>
+    <string name="save">Save</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="label_campground_entry">Campground Entry</string>
+    <string name="label_campground_list">Campground List</string>
+    <string name="review">Review</string>
 </resources>

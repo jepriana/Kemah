@@ -21,7 +21,7 @@
         tools:srcCompat="@drawable/camping" />
 
     <TextView
-        android:id="@+id/textTitle"
+        android:id="@+id/text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -38,7 +38,7 @@
         android:text="@string/username" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/edit_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -57,7 +57,7 @@
         android:text="@string/password" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/edit_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -69,14 +69,14 @@
         android:textAlignment="textStart" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/button_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/login" />
 
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/button_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
