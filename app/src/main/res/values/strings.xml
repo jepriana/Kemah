@@ -18,4 +18,12 @@
     <string name="label_campground_entry">Campground Entry</string>
     <string name="label_campground_list">Campground List</string>
     <string name="review">Review</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="person1">Agus Budiman</string>
+    <string name="review1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pretium viverra suspendisse potenti nullam ac tortor vitae purus faucibus.</string>
+    <string name="person2">Budi Sutejo</string>
+    <string name="review2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="person3">Citra Wati</string>
+    <string name="review3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Urna et pharetra pharetra massa massa ultricies mi quis. Viverra nibh cras pulvinar mattis nunc sed blandit.</string>
+
 </resources>

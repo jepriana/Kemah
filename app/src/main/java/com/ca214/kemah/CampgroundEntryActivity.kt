@@ -1,5 +1,6 @@
 package com.ca214.kemah
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -60,13 +61,21 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
 
                 // Send data to detail activity
                 if (!invalidEntries) {
-                    var openCampgroundDetail = Intent(this@CampgroundEntryActivity, CampgroundDetailActivity::class.java)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_NAME, inputName)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_LOCATION, inputLocation)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_ADDRESS, inputAddress)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_PRICE, inputPrice)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_IMAGE_URL, inputImageUrl)
-                    startActivity(openCampgroundDetail)
+//                    var openCampgroundDetail = Intent(this@CampgroundEntryActivity, CampgroundDetailActivity::class.java)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_NAME, inputName)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_LOCATION, inputLocation)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_ADDRESS, inputAddress)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_PRICE, inputPrice)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_IMAGE_URL, inputImageUrl)
+//                    startActivity(openCampgroundDetail)
+                    val intentResponse = Intent()
+                    intentResponse.putExtra(MainActivity.EXTRA_NAME, inputName)
+                    intentResponse.putExtra(MainActivity.EXTRA_LOCATION, inputLocation)
+                    intentResponse.putExtra(MainActivity.EXTRA_ADDRESS, inputAddress)
+                    intentResponse.putExtra(MainActivity.EXTRA_PRICE, inputPrice)
+                    intentResponse.putExtra(MainActivity.EXTRA_IMAGE_URL, inputImageUrl)
+                    setResult(Activity.RESULT_OK, intentResponse)
+                    finish()
                 }
             }
         }

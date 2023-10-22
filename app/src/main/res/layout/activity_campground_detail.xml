@@ -47,9 +47,126 @@
         android:layout_height="wrap_content"
         android:text="@string/campground_address" />
 
-    <Button
-        android:id="@+id/button_review"
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/review" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            >
+
+            <ImageView
+                android:id="@+id/profile_1"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_weight="0"
+                android:contentDescription="@string/profile_picture"
+                app:srcCompat="@drawable/baseline_person_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/person_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/person1"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/review_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="@string/review1"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            >
+
+            <ImageView
+                android:id="@+id/profile_2"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_weight="0"
+                android:contentDescription="@string/profile_picture"
+                app:srcCompat="@drawable/baseline_person_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/person_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/person2"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/review_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="@string/review2"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            >
+
+            <ImageView
+                android:id="@+id/profile_3"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_weight="0"
+                android:contentDescription="@string/profile_picture"
+                app:srcCompat="@drawable/baseline_person_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/person_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/person3"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/review_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="@string/review3"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+        </TableRow>
+    </TableLayout>
+
 </LinearLayout>

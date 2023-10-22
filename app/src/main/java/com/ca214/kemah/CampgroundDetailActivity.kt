@@ -2,7 +2,9 @@ package com.ca214.kemah
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 
 class CampgroundDetailActivity : AppCompatActivity() {
     companion object {
@@ -17,6 +19,7 @@ class CampgroundDetailActivity : AppCompatActivity() {
     lateinit var textLocation: TextView
     lateinit var textPrice: TextView
     lateinit var textAddress: TextView
+    lateinit var imageIllustration: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,7 @@ class CampgroundDetailActivity : AppCompatActivity() {
         textLocation = findViewById(R.id.text_location)
         textAddress = findViewById(R.id.text_address)
         textPrice = findViewById(R.id.text_price)
+        imageIllustration = findViewById(R.id.image_campground)
 
         // Mengambil data dari intent
         val name = intent.getStringExtra(EXTRA_NAME)
@@ -35,6 +39,11 @@ class CampgroundDetailActivity : AppCompatActivity() {
         val imageUrl = intent.getStringExtra(EXTRA_IMAGE_URL)
 
         // Menggunakan data dalam text view
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(imageUrl)
+                .into(imageIllustration)
+        }
         textName.text = name
         textLocation.text = location
         textAddress.text = address
