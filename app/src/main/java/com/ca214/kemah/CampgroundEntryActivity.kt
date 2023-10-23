@@ -1,5 +1,7 @@
 package com.ca214.kemah
 
+import android.app.Activity
+import android.content.ClipDescription
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +15,7 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
     final lateinit var editAddress: EditText
     final lateinit var editPrice: EditText
     final lateinit var editImageUrl: EditText
+    final lateinit var editDescription: EditText
     final lateinit var btnSave: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +27,7 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
         editAddress = findViewById(R.id.edit_address)
         editPrice = findViewById(R.id.edit_price)
         editImageUrl = findViewById(R.id.edit_image_url)
+        editDescription = findViewById(R.id.edit_description)
         btnSave = findViewById(R.id.button_save)
 
         btnSave.setOnClickListener(this)
@@ -38,6 +42,7 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
                 val inputAddress = editAddress.text.toString().trim()
                 val inputPrice = editPrice.text.toString().trim()
                 val inputImageUrl = editImageUrl.text.toString().trim()
+                val inputDescription = editDescription.text.toString().trim()
                 var invalidEntries = false
 
                 // Validate data
@@ -60,13 +65,22 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
 
                 // Send data to detail activity
                 if (!invalidEntries) {
-                    var openCampgroundDetail = Intent(this@CampgroundEntryActivity, CampgroundDetailActivity::class.java)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_NAME, inputName)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_LOCATION, inputLocation)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_ADDRESS, inputAddress)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_PRICE, inputPrice)
-                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_IMAGE_URL, inputImageUrl)
-                    startActivity(openCampgroundDetail)
+//                    var openCampgroundDetail = Intent(this@CampgroundEntryActivity, CampgroundDetailActivity::class.java)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_NAME, inputName)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_LOCATION, inputLocation)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_ADDRESS, inputAddress)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_PRICE, inputPrice)
+//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_IMAGE_URL, inputImageUrl)
+//                    startActivity(openCampgroundDetail)
+                    val intentResponse = Intent()
+                    intentResponse.putExtra(MainActivity.EXTRA_NAME, inputName)
+                    intentResponse.putExtra(MainActivity.EXTRA_LOCATION, inputLocation)
+                    intentResponse.putExtra(MainActivity.EXTRA_ADDRESS, inputAddress)
+                    intentResponse.putExtra(MainActivity.EXTRA_PRICE, inputPrice.toInt())
+                    intentResponse.putExtra(MainActivity.EXTRA_DESCRIPTION, inputDescription)
+                    intentResponse.putExtra(MainActivity.EXTRA_IMAGE_URL, inputImageUrl)
+                    setResult(Activity.RESULT_OK, intentResponse)
+                    finish()
                 }
             }
         }

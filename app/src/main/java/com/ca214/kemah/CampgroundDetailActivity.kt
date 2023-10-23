@@ -10,6 +10,7 @@ class CampgroundDetailActivity : AppCompatActivity() {
         var EXTRA_LOCATION = "extra_location"
         var EXTRA_ADDRESS = "extra_address"
         var EXTRA_PRICE = "extra_price"
+        var EXTRA_DESCRIPTION = "extra_description"
         var EXTRA_IMAGE_URL = "extra_image_url"
     }
 

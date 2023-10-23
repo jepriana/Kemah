@@ -21,6 +21,13 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_campgrounds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            tools:listitem="@layout/item_row_campground" />
+
 
     </LinearLayout>
 
