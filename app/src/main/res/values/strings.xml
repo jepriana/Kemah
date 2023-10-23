@@ -12,6 +12,7 @@
     <string name="campground_price">Campground Price</string>
     <string name="campground_image_url">Campground Image URL</string>
     <string name="campground_image_description">Campground Illustration</string>
+    <string name="campground_description">Campground Description</string>
     <string name="save">Save</string>
     <string name="update">Update</string>
     <string name="delete">Delete</string>

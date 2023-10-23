@@ -8,13 +8,15 @@ data class Campground(
     val location: String?,
     val address: String?,
     val price: Int,
-    val imageUrl: String?
+    val description: String?,
+    val imageUrl: String?,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readInt(),
+        parcel.readString(),
         parcel.readString()
     ) {
     }
@@ -24,6 +26,7 @@ data class Campground(
         parcel.writeString(location)
         parcel.writeString(address)
         parcel.writeInt(price)
+        parcel.writeString(description)
         parcel.writeString(imageUrl)
     }
 

@@ -25,7 +25,7 @@ class ListCampgroundAdapter(private val listCampground: ArrayList<Campground>) :
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
-        val (name, location, address, price, imageUrl) = listCampground[position]
+        val (name, location, address, price, description, imageUrl) = listCampground[position]
         if (!imageUrl.isNullOrEmpty()) {
             Glide.with(holder.itemView.context)
                 .load(imageUrl)
@@ -40,6 +40,7 @@ class ListCampgroundAdapter(private val listCampground: ArrayList<Campground>) :
             openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_ADDRESS, address)
             openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_PRICE, price)
             openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_IMAGE_URL, imageUrl)
+            openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_DESCRIPTION, description)
             holder.itemView.context.startActivity(openCampgroundDetail)
         }
     }

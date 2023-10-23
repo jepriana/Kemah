@@ -13,6 +13,7 @@ class CampgroundDetailActivity : AppCompatActivity() {
         var EXTRA_ADDRESS = "extra_address"
         var EXTRA_PRICE = "extra_price"
         var EXTRA_IMAGE_URL = "extra_image_url"
+        var EXTRA_DESCRIPTION = "extra_image_url"
     }
 
     lateinit var textName: TextView
@@ -20,6 +21,7 @@ class CampgroundDetailActivity : AppCompatActivity() {
     lateinit var textPrice: TextView
     lateinit var textAddress: TextView
     lateinit var imageIllustration: ImageView
+    lateinit var textDescription: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,7 @@ class CampgroundDetailActivity : AppCompatActivity() {
         textAddress = findViewById(R.id.text_address)
         textPrice = findViewById(R.id.text_price)
         imageIllustration = findViewById(R.id.image_campground)
+        textDescription = findViewById(R.id.text_description)
 
         // Mengambil data dari intent
         val name = intent.getStringExtra(EXTRA_NAME)
@@ -37,6 +40,7 @@ class CampgroundDetailActivity : AppCompatActivity() {
         val address = intent.getStringExtra(EXTRA_ADDRESS)
         val price = intent.getStringExtra(EXTRA_PRICE)
         val imageUrl = intent.getStringExtra(EXTRA_IMAGE_URL)
+        val description = intent.getStringExtra(EXTRA_DESCRIPTION)
 
         // Menggunakan data dalam text view
         if (!imageUrl.isNullOrEmpty()) {
@@ -48,5 +52,6 @@ class CampgroundDetailActivity : AppCompatActivity() {
         textLocation.text = location
         textAddress.text = address
         textPrice.text = "Rp $price"
+        textDescription.text = description
     }
 }
