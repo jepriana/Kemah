@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_display_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/display_list" />
+    <item
+        android:id="@+id/action_display_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/display_grid" />
+</menu>

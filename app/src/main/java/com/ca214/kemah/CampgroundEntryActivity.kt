@@ -5,9 +5,13 @@ import android.content.ClipDescription
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import com.ca214.kemah.models.Campground
 
 class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
     final lateinit var editName: EditText
@@ -17,6 +21,7 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
     final lateinit var editImageUrl: EditText
     final lateinit var editDescription: EditText
     final lateinit var btnSave: Button
+    private var selectedIndex: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +35,59 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
         editDescription = findViewById(R.id.edit_description)
         btnSave = findViewById(R.id.button_save)
 
+        // Mengambil index campground dari intent
+        selectedIndex = intent.getIntExtra(MainActivity.SELECTED_CAMPGROUND_INDEX, -1)
+
+        // Check selectedIndex apakah lebih besar atau sama dengan 0
+        if (selectedIndex >= 0) {
+            val campground = MainActivity.listCampgrounds[selectedIndex]
+            editName.setText(campground.name)
+            editLocation.setText(campground.location)
+            editAddress.setText(campground.address)
+            editPrice.setText(campground.price.toString())
+            editDescription.setText(campground.description)
+            editImageUrl.setText(campground.imageUrl)
+            btnSave.setText(R.string.update)
+        }
+
         btnSave.setOnClickListener(this)
+
+        val actionBar = supportActionBar
+        actionBar?.setTitle("Campground Entry")
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.campground_entry_menu, menu)
+        val menuDelete = menu?.findItem(R.id.action_delete_campground)
+        if (menuDelete != null) {
+            menuDelete.isVisible = selectedIndex >= 0;
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_delete_campground -> {
+                // Menampilkan dialog konfirmasi penghapusan data
+                var builder = AlertDialog.Builder(this)
+                builder.setMessage("Are you sure want to delete campground data?")
+                    .setCancelable(false)
+                    .setPositiveButton("Sure") { dialog, id ->
+                        // Menghapus data campground
+                        MainActivity.listCampgrounds.removeAt(selectedIndex)
+                        finish()
+                    }
+                    .setNegativeButton("Cancel") { dialog, id -> }
+                var alertDilog = builder.create()
+                alertDilog.show()
+            }
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onClick(view: View?) {
@@ -63,23 +120,26 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
                     editPrice.setError("Campground price is required")
                 }
 
-                // Send data to detail activity
+                // Penyimpanan data campground
                 if (!invalidEntries) {
-//                    var openCampgroundDetail = Intent(this@CampgroundEntryActivity, CampgroundDetailActivity::class.java)
-//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_NAME, inputName)
-//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_LOCATION, inputLocation)
-//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_ADDRESS, inputAddress)
-//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_PRICE, inputPrice)
-//                    openCampgroundDetail.putExtra(CampgroundDetailActivity.EXTRA_IMAGE_URL, inputImageUrl)
-//                    startActivity(openCampgroundDetail)
-                    val intentResponse = Intent()
-                    intentResponse.putExtra(MainActivity.EXTRA_NAME, inputName)
-                    intentResponse.putExtra(MainActivity.EXTRA_LOCATION, inputLocation)
-                    intentResponse.putExtra(MainActivity.EXTRA_ADDRESS, inputAddress)
-                    intentResponse.putExtra(MainActivity.EXTRA_PRICE, inputPrice.toInt())
-                    intentResponse.putExtra(MainActivity.EXTRA_DESCRIPTION, inputDescription)
-                    intentResponse.putExtra(MainActivity.EXTRA_IMAGE_URL, inputImageUrl)
-                    setResult(Activity.RESULT_OK, intentResponse)
+                    // Membuat object campground baru
+                    val newCampground = Campground(
+                        name = inputName,
+                        location = inputLocation,
+                        address = inputAddress,
+                        price = inputPrice.toInt(),
+                        imageUrl = inputImageUrl,
+                        description = inputDescription,
+                    )
+
+                    if (selectedIndex >= 0) {
+                        // Pembaharuan data campground
+                        MainActivity.listCampgrounds[selectedIndex] = newCampground
+                    } else {
+                        // Menyimpan campground baru
+                        MainActivity.listCampgrounds.add(newCampground)
+                    }
+
                     finish()
                 }
             }

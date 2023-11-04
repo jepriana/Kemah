@@ -4,10 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ca214.kemah.adapters.CampgroundGridAdapter
 import com.ca214.kemah.adapters.CampgroundListAdapter
 import com.ca214.kemah.models.Campground
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -20,10 +24,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var EXTRA_PRICE = "extra_price"
         var EXTRA_DESCRIPTION = "extra_description"
         var EXTRA_IMAGE_URL = "extra_image_url"
+        var listCampgrounds = ArrayList<Campground>()
+        var SELECTED_CAMPGROUND_INDEX = "selected_campground_index"
     }
 
     private lateinit var fabAddCampground: FloatingActionButton
-    private var listCampgrounds = ArrayList<Campground>()
     private lateinit var rvCampgroundList: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,46 +42,52 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         listCampgrounds.addAll(getListCampgrounds())
         showCampgroundList()
+
+        val actionBar = supportActionBar
+        actionBar?.setTitle("Kemah Data Campgrounds")
+    }
+
+    override fun onResume() {
+        showCampgroundList()
+        super.onResume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_activity_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_display_list -> {
+                showCampgroundList()
+            }
+            R.id.action_display_grid -> {
+                showCampgroundGrid()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onClick(view: View?) {
         when(view?.id) {
             R.id.fab_add_campground -> {
                 val openCampgroundEntry = Intent(this@MainActivity, CampgroundEntryActivity::class.java)
-                openEntryRequest.launch(openCampgroundEntry)
+                startActivity(openCampgroundEntry)
             }
         }
-    }
-
-    private val openEntryRequest = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        result -> if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-        if (data != null) {
-            val name = data.getStringExtra(EXTRA_NAME)
-            val location = data.getStringExtra(EXTRA_LOCATION)
-            val address = data.getStringExtra(EXTRA_ADDRESS)
-            val price = data.getIntExtra(EXTRA_PRICE, 0)
-            val description = data.getStringExtra(EXTRA_DESCRIPTION)
-            val imageUrl = data.getStringExtra(EXTRA_IMAGE_URL)
-
-            listCampgrounds.add(Campground(
-                name = name,
-                location = location,
-                address = address,
-                price = price,
-                description = description,
-                imageUrl = imageUrl,
-            ))
-
-            showCampgroundList()
-        }
-    }
     }
 
     private fun showCampgroundList() {
         rvCampgroundList.layoutManager = LinearLayoutManager(this)
         val campgroundListAdapter = CampgroundListAdapter(listCampgrounds)
         rvCampgroundList.adapter = campgroundListAdapter
+    }
+
+    private fun showCampgroundGrid() {
+        rvCampgroundList.layoutManager = GridLayoutManager(this, 2)
+        val campgroundGridAdapter = CampgroundGridAdapter(listCampgrounds)
+        rvCampgroundList.adapter = campgroundGridAdapter
     }
 
     private fun getListCampgrounds(): ArrayList<Campground> {

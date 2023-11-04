@@ -16,27 +16,25 @@ import com.ca214.kemah.MainActivity
 import com.ca214.kemah.R
 import com.ca214.kemah.models.Campground
 
-class CampgroundListAdapter(private val listCampgrounds: ArrayList<Campground>) : Adapter<CampgroundListAdapter.ListViewHolder>() {
+class CampgroundGridAdapter(private val listCampgrounds: ArrayList<Campground>) : Adapter<CampgroundGridAdapter.ListViewHolder>() {
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgCampgroundIllustration: ImageView = itemView.findViewById(R.id.img_campground_row)
-        val tvCampgroundName: TextView = itemView.findViewById(R.id.text_campground_row_name)
-        val tvCampgroundLocation: TextView = itemView.findViewById(R.id.text_campground_row_location)
-        val tvCampgroundPrice: TextView = itemView.findViewById(R.id.text_campground_row_price)
+        val imgCampgroundIllustration: ImageView = itemView.findViewById(R.id.img_campground_grid)
+        val tvCampgroundName: TextView = itemView.findViewById(R.id.text_campground_grid_name)
+        val tvCampgroundLocationAndPrice: TextView = itemView.findViewById(R.id.text_campground_grid_location_price)
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CampgroundListAdapter.ListViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_row_campground, parent, false)
+    ): CampgroundGridAdapter.ListViewHolder {
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_grid_campground, parent, false)
         return ListViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CampgroundListAdapter.ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CampgroundGridAdapter.ListViewHolder, position: Int) {
         val campground = listCampgrounds.get(position)
         holder.tvCampgroundName.text = campground.name
-        holder.tvCampgroundLocation.text = campground.location
-        holder.tvCampgroundPrice.text = "Rp ${campground.price}"
+        holder.tvCampgroundLocationAndPrice.text = "${campground.location} - Rp ${campground.price}"
 
         if (!campground.imageUrl.isNullOrEmpty()) {
             Glide.with(holder.itemView.context)

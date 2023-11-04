@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="256dp"
             android:contentDescription="@string/campground_image_description"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/camping" />
 
         <TextView

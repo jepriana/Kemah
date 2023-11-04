@@ -20,4 +20,6 @@
     <string name="label_campground_entry">Campground Entry</string>
     <string name="label_campground_list">Campground List</string>
     <string name="review">Review</string>
+    <string name="display_list">Display List</string>
+    <string name="display_grid">Display Grid</string>
 </resources>
