@@ -2,10 +2,13 @@ package com.ca214.kemah
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract.Data
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.ca214.kemah.data.DatabaseHelper
+import java.util.UUID
 
 class CampgroundDetailActivity : AppCompatActivity() {
 
@@ -15,10 +18,13 @@ class CampgroundDetailActivity : AppCompatActivity() {
     lateinit var textAddress: TextView
     lateinit var textDescription: TextView
     lateinit var imgCampground: ImageView
+    lateinit var dbHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campground_detail)
+
+        dbHelper = DatabaseHelper(this)
 
         textName = findViewById(R.id.text_name)
         textLocation = findViewById(R.id.text_location)
@@ -28,22 +34,21 @@ class CampgroundDetailActivity : AppCompatActivity() {
         imgCampground = findViewById(R.id.image_campground)
 
         // Mengambil data dari intent
-        val name = intent.getStringExtra(MainActivity.EXTRA_NAME)
-        val location = intent.getStringExtra(MainActivity.EXTRA_LOCATION)
-        val address = intent.getStringExtra(MainActivity.EXTRA_ADDRESS)
-        val price = intent.getIntExtra(MainActivity.EXTRA_PRICE, 0)
-        val imageUrl = intent.getStringExtra(MainActivity.EXTRA_IMAGE_URL)
-        val description = intent.getStringExtra(MainActivity.EXTRA_DESCRIPTION)
+        val id = intent.getStringExtra(MainActivity.EXTRA_ID)
+        if (id != null) {
+            val campground = dbHelper.findCampgroundById(id)
+            if (campground != null) {
+                // Menggunakan data dalam text view
+                textName.text = campground.name
+                textLocation.text = campground.location
+                textAddress.text = campground.address
+                textPrice.text = "Rp ${campground.price}"
+                textDescription.text = campground.description
 
-        // Menggunakan data dalam text view
-        textName.text = name
-        textLocation.text = location
-        textAddress.text = address
-        textPrice.text = "Rp $price"
-        textDescription.text = description
-
-        if (!imageUrl.isNullOrEmpty()) {
-            Glide.with(this).load(imageUrl).into(imgCampground)
+                if (!campground.imageUrl.isNullOrEmpty()) {
+                    Glide.with(this).load(campground.imageUrl).into(imgCampground)
+                }
+            }
         }
 
         val actionBar = supportActionBar

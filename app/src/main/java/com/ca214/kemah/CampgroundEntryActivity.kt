@@ -11,7 +11,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import com.bumptech.glide.Glide
+import com.ca214.kemah.data.DatabaseHelper
 import com.ca214.kemah.models.Campground
+import java.util.UUID
 
 class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
     final lateinit var editName: EditText
@@ -21,12 +24,14 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
     final lateinit var editImageUrl: EditText
     final lateinit var editDescription: EditText
     final lateinit var btnSave: Button
-    private var selectedIndex: Int = -1
+    private var selectedId: UUID? = null
+    final lateinit var dbHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campground_entry)
 
+        dbHelper = DatabaseHelper(this)
         editName = findViewById(R.id.edit_name)
         editLocation = findViewById(R.id.edit_location)
         editAddress = findViewById(R.id.edit_address)
@@ -35,25 +40,26 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
         editDescription = findViewById(R.id.edit_description)
         btnSave = findViewById(R.id.button_save)
 
-        // Mengambil index campground dari intent
-        selectedIndex = intent.getIntExtra(MainActivity.SELECTED_CAMPGROUND_INDEX, -1)
-
-        // Check selectedIndex apakah lebih besar atau sama dengan 0
-        if (selectedIndex >= 0) {
-            val campground = MainActivity.listCampgrounds[selectedIndex]
-            editName.setText(campground.name)
-            editLocation.setText(campground.location)
-            editAddress.setText(campground.address)
-            editPrice.setText(campground.price.toString())
-            editDescription.setText(campground.description)
-            editImageUrl.setText(campground.imageUrl)
-            btnSave.setText(R.string.update)
+        // Mengambil id campground dari intent
+        val id = intent.getStringExtra(MainActivity.EXTRA_ID)
+        if (id != null) {
+            val campground = dbHelper.findCampgroundById(id)
+            if (campground != null) {
+                selectedId = campground.id
+                editName.setText(campground.name)
+                editLocation.setText(campground.location)
+                editAddress.setText(campground.address)
+                editPrice.setText(campground.price.toString())
+                editDescription.setText(campground.description)
+                editImageUrl.setText(campground.imageUrl)
+                btnSave.setText(R.string.update)
+            }
         }
 
         btnSave.setOnClickListener(this)
 
         val actionBar = supportActionBar
-        actionBar?.setTitle("Campground Entry")
+        actionBar?.title = "Campground Entry"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -61,7 +67,7 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
         menuInflater.inflate(R.menu.campground_entry_menu, menu)
         val menuDelete = menu?.findItem(R.id.action_delete_campground)
         if (menuDelete != null) {
-            menuDelete.isVisible = selectedIndex >= 0;
+            menuDelete.isVisible = selectedId != null;
         }
         return super.onCreateOptionsMenu(menu)
     }
@@ -75,7 +81,8 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
                     .setCancelable(false)
                     .setPositiveButton("Sure") { dialog, id ->
                         // Menghapus data campground
-                        MainActivity.listCampgrounds.removeAt(selectedIndex)
+                        // MainActivity.listCampgrounds.removeAt(selectedIndex)
+                        dbHelper.deleteCampground(UUID.fromString(selectedId.toString()))
                         finish()
                     }
                     .setNegativeButton("Cancel") { dialog, id -> }
@@ -123,7 +130,8 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
                 // Penyimpanan data campground
                 if (!invalidEntries) {
                     // Membuat object campground baru
-                    val newCampground = Campground(
+                    var newCampground = Campground(
+                        id = UUID.randomUUID(),
                         name = inputName,
                         location = inputLocation,
                         address = inputAddress,
@@ -132,12 +140,15 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
                         description = inputDescription,
                     )
 
-                    if (selectedIndex >= 0) {
+                    if (selectedId != null) {
                         // Pembaharuan data campground
-                        MainActivity.listCampgrounds[selectedIndex] = newCampground
+                        // MainActivity.listCampgrounds[selectedIndex] = newCampground
+                        val updatedCampground = newCampground.copy(id = selectedId)
+                        dbHelper.updateCampground(updatedCampground)
                     } else {
                         // Menyimpan campground baru
-                        MainActivity.listCampgrounds.add(newCampground)
+//                        MainActivity.listCampgrounds.add(newCampground)
+                        dbHelper.insertCampground(newCampground)
                     }
 
                     finish()
