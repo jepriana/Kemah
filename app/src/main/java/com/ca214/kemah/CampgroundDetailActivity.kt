@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import java.util.UUID
 
 class CampgroundDetailActivity : AppCompatActivity() {
 
@@ -28,26 +29,26 @@ class CampgroundDetailActivity : AppCompatActivity() {
         imgCampground = findViewById(R.id.image_campground)
 
         // Mengambil data dari intent
-        val name = intent.getStringExtra(MainActivity.EXTRA_NAME)
-        val location = intent.getStringExtra(MainActivity.EXTRA_LOCATION)
-        val address = intent.getStringExtra(MainActivity.EXTRA_ADDRESS)
-        val price = intent.getIntExtra(MainActivity.EXTRA_PRICE, 0)
-        val imageUrl = intent.getStringExtra(MainActivity.EXTRA_IMAGE_URL)
-        val description = intent.getStringExtra(MainActivity.EXTRA_DESCRIPTION)
+        val id = intent.getStringExtra(MainActivity.EXTRA_CAMPGROUND_ID)
+        if (id != null) {
+            // Mengakses data campground berdasarkan id
+            val campground = MainActivity.listCampgrounds.firstOrNull { cmp -> cmp.id == UUID.fromString(id) }
+            if (campground != null) {
+                // Menggunakan data dalam text view
+                textName.text = campground.name
+                textLocation.text = campground.location
+                textAddress.text = campground.address
+                textPrice.text = "Rp ${campground.price}"
+                textDescription.text = campground.description
 
-        // Menggunakan data dalam text view
-        textName.text = name
-        textLocation.text = location
-        textAddress.text = address
-        textPrice.text = "Rp $price"
-        textDescription.text = description
-
-        if (!imageUrl.isNullOrEmpty()) {
-            Glide.with(this).load(imageUrl).into(imgCampground)
+                if (!campground.imageUrl.isNullOrEmpty()) {
+                    Glide.with(this).load(campground.imageUrl).into(imgCampground)
+                }
+            }
         }
 
         val actionBar = supportActionBar
-        actionBar?.setTitle("Campground Detail")
+        actionBar?.title = "Campground Detail"
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
