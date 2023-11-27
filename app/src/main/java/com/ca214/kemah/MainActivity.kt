@@ -18,6 +18,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
         var EXTRA_CAMPGROUND_ID = "extra_campground_id"
+        var SHARED_PREFERENCES_NAME = "KemahSP"
+        val ACCESS_TOKEN = "accessToken"
+        val REFRESH_TOKEN = "refreshToken"
         var listCampgrounds = ArrayList<Campground>()
     }
 
