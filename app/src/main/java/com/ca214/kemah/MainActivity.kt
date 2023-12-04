@@ -3,17 +3,25 @@ package com.ca214.kemah
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ca214.kemah.adapters.CampgroundGridAdapter
 import com.ca214.kemah.adapters.CampgroundListAdapter
+import com.ca214.kemah.data.api.ApiConfig
 import com.ca214.kemah.data.database.DatabaseHelper
 import com.ca214.kemah.data.models.Campground
+import com.ca214.kemah.data.models.responses.CampgroundResponse
+import com.ca214.kemah.data.repositories.CampgroundRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
@@ -127,8 +135,40 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //            )
 //        )
         // Mengambil data dari database
-        val list = dbHelper.getAllCampgrounds()
-        listCampgrounds.addAll(list)
+//        val list = dbHelper.getAllCampgrounds()
+        val apiService = ApiConfig.instanceCampgroundService
+        apiService.getCampgrounds().enqueue(object : Callback<List<CampgroundResponse>> {
+            override fun onResponse(call: Call<List<CampgroundResponse>>, response: Response<List<CampgroundResponse>>) {
+                if (response.isSuccessful) {
+                    val responseData = response.body()
+                    if (!responseData.isNullOrEmpty()) {
+                        val result = responseData.map { campground ->
+                            Campground(
+                                id = campground.id,
+                                name = campground.name,
+                                location = campground.location,
+                                address = campground.address,
+                                price = campground.price,
+                                imageUrl = campground.imageUrl,
+                                description = campground.description,
+                                latitude = campground.latitude,
+                                longitude = campground.longitude,
+                                creatorId = campground.creatorId,
+                                creatorUsername = campground.creatorUsername
+                            )
+                        }
+                        listCampgrounds.addAll(result)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<CampgroundResponse>>, t: Throwable) {
+                Log.e("ERROR: ", t.localizedMessage);
+            }
+        })
+//        val campgroundRepository = CampgroundRepository()
+//        val campgroundsLiveData = campgroundRepository.getCampgrounds()
+//        campgroundsLiveData.observe(this, Observer { campgrounds -> listCampgrounds.addAll(campgrounds) })
         return listCampgrounds
     }
 }

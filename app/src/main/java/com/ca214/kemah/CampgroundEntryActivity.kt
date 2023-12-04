@@ -145,6 +145,10 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
                         price = inputPrice.toInt(),
                         imageUrl = inputImageUrl,
                         description = inputDescription,
+                        latitude = null,
+                        longitude = null,
+                        creatorUsername = null,
+                        creatorId = null
                     )
 
                     if (selectedId != null) {

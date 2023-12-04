@@ -89,7 +89,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                                         val editor = sharedPreferences.edit()
                                         editor.putString(MainActivity.ACCESS_TOKEN, data.accessToken)
                                         editor.putString(MainActivity.REFRESH_TOKEN, data.refreshToken)
-                                        editor.commit()
+                                        editor.apply()
 
                                         Toast.makeText(this@LoginActivity, "Login Success", Toast.LENGTH_LONG).show()
                                         navigateToMainActivity()

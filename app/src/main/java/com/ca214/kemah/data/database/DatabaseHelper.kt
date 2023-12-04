@@ -20,17 +20,25 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val COLUMN_PRICE = "price"
         private const val COLUMN_DESCRIPTION = "description"
         private const val COLUMN_IMAGE_URL = "image_url"
+        private const val COLUMN_CREATOR_ID = "creator_id"
+        private const val COLUMN_CREATOR_USERNAME = "creator_username"
+        private const val COLUMN_LATITUDE = "latitude"
+        private const val COLUMN_LONGITUDE = "longitude"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         var query = "CREATE TABLE $TABLE_FAVORITE_CAMP (" +
                 "$COLUMN_ID TEXT PRIMARY KEY," +
+                "$COLUMN_CREATOR_ID TEXT," +
+                "$COLUMN_CREATOR_USERNAME TEXT," +
                 "$COLUMN_NAME TEXT," +
                 "$COLUMN_LOCATION TEXT," +
                 "$COLUMN_ADDRESS TEXT," +
                 "$COLUMN_PRICE INT," +
                 "$COLUMN_DESCRIPTION TEXT," +
-                "$COLUMN_IMAGE_URL TEXT)"
+                "$COLUMN_IMAGE_URL TEXT," +
+                "$COLUMN_LATITUDE REAL," +
+                "$COLUMN_LONGITUDE REAL)"
         db?.execSQL(query)
     }
 
@@ -51,6 +59,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put(COLUMN_PRICE, campground.price)
             put(COLUMN_DESCRIPTION, campground.description)
             put(COLUMN_IMAGE_URL, campground.imageUrl)
+            put(COLUMN_CREATOR_ID, campground.creatorId?.toString())
+            put(COLUMN_CREATOR_USERNAME, campground.creatorUsername)
+            put(COLUMN_LATITUDE, campground.latitude)
+            put(COLUMN_LONGITUDE, campground.longitude)
         }
         db.insert(TABLE_FAVORITE_CAMP, null, values)
         db.close()
@@ -66,6 +78,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put(COLUMN_PRICE, campground.price)
             put(COLUMN_DESCRIPTION, campground.description)
             put(COLUMN_IMAGE_URL, campground.imageUrl)
+            put(COLUMN_CREATOR_ID, campground.creatorId?.toString())
+            put(COLUMN_CREATOR_USERNAME, campground.creatorUsername)
+            put(COLUMN_LATITUDE, campground.latitude)
+            put(COLUMN_LONGITUDE, campground.longitude)
         }
         val whereClause = "$COLUMN_ID =?"
         val whereArgs = arrayOf(campground.id.toString())
@@ -97,7 +113,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADDRESS)),
                     description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
                     imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL)),
-                    price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE))
+                    price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE)),
+                    creatorId = UUID.fromString(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATOR_ID))),
+                    creatorUsername = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATOR_USERNAME)),
+                    latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LATITUDE)),
+                    longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LONGITUDE))
                 )
                 campgrounds.add(campground)
             } while (cursor.moveToNext())
@@ -121,7 +141,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADDRESS)),
                 description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
                 imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL)),
-                price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE))
+                price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE)),
+                creatorId = UUID.fromString(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATOR_ID))),
+                creatorUsername = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATOR_USERNAME)),
+                latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LATITUDE)),
+                longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LONGITUDE))
             )
         }
         cursor.close()
