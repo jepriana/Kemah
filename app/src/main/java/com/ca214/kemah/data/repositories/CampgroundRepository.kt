@@ -1,12 +1,17 @@
 package com.ca214.kemah.data.repositories
 
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ca214.kemah.LoginActivity
 import com.ca214.kemah.data.api.ApiConfig
 import com.ca214.kemah.data.models.Campground
+import com.ca214.kemah.data.models.CampgroundDetail
+import com.ca214.kemah.data.models.Comment
+import com.ca214.kemah.data.models.UserData
 import com.ca214.kemah.data.models.requests.CampgroundRequest
+import com.ca214.kemah.data.models.responses.CampgroundDetailResponse
 import com.ca214.kemah.data.models.responses.CampgroundResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,11 +50,54 @@ class CampgroundRepository {
             }
 
             override fun onFailure(call: Call<List<CampgroundResponse>>, t: Throwable) {
-                val test = t.localizedMessage
-                val x = test
+                Log.e("Load data campground failed", t.localizedMessage)
             }
         })
 
+        return data
+    }
+
+    fun getCampgroundById(id: UUID): LiveData<CampgroundDetail> {
+        val data = MutableLiveData<CampgroundDetail>()
+        apiService.getCampgroundById(id).enqueue(object : Callback<CampgroundDetailResponse?> {
+            override fun onResponse(call: Call<CampgroundDetailResponse?>, response: Response<CampgroundDetailResponse?>) {
+                if (response.isSuccessful) {
+                    val campground = response.body()
+                    if (campground != null) {
+                            data.value = CampgroundDetail(
+                                id = campground.id,
+                                creator =  UserData(
+                                    id = campground.creator.id,
+                                    username = campground.creator.username,
+                                    email = campground.creator.email,
+                                    isAdmin = campground.creator.isAdmin
+                                ),
+                                name = campground.name,
+                                location = campground.location,
+                                address = campground.address,
+                                price = campground.price,
+                                imageUrl = campground.imageUrl,
+                                description = campground.description,
+                                latitude = campground.latitude,
+                                longitude = campground.longitude,
+                                comments = campground.comments.map {
+                                    comment -> Comment(
+                                        id = comment.id,
+                                        creatorId = comment.creatorId,
+                                        creatorUsername = comment.creatorUsername,
+                                        content =  comment.content
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+
+            override fun onFailure(call: Call<CampgroundDetailResponse?>, t: Throwable) {
+                data.value = null
+                Log.e("Load data campground failed", t.localizedMessage)
+            }
+        })
         return data
     }
 
@@ -96,11 +144,8 @@ class CampgroundRepository {
         return data
     }
 
-    fun updateCampground(id: Int, campground: Campground): LiveData<Campground> {
+    fun updateCampground(id: UUID, campground: Campground): LiveData<Campground> {
         val data = MutableLiveData<Campground>()
-        val campgroundId = campground.id;
-
-        if (campgroundId != null) {
 
             val campgroundRequest = CampgroundRequest (
                 name = campground.name,
@@ -113,7 +158,7 @@ class CampgroundRepository {
                 longitude = campground.longitude,
             )
 
-            apiService.updateCampground(campgroundId, campgroundRequest).enqueue(object : Callback<String> {
+            apiService.updateCampground(id, campgroundRequest).enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful) {
                         data.value = campground
@@ -124,7 +169,6 @@ class CampgroundRepository {
                     data.value = null
                 }
             })
-        }
 
         return data
     }

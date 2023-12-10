@@ -1,6 +1,7 @@
 package com.ca214.kemah
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.ClipDescription
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +11,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.ca214.kemah.data.database.DatabaseHelper
 import com.ca214.kemah.data.models.Campground
+import com.ca214.kemah.data.repositories.CampgroundRepository
 import java.util.UUID
 
 class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
@@ -26,12 +30,15 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
     final lateinit var btnSave: Button
     private var selectedId: UUID? = null
     private lateinit var dbHelper: DatabaseHelper
+    private lateinit var campgroundRepository: CampgroundRepository
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campground_entry)
 
         dbHelper = DatabaseHelper(this)
+        campgroundRepository = CampgroundRepository()
 
         editName = findViewById(R.id.edit_name)
         editLocation = findViewById(R.id.edit_location)
@@ -46,22 +53,22 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
 
         // Mengambil index campground dari intent
         val id = intent.getStringExtra(MainActivity.EXTRA_CAMPGROUND_ID)
+        selectedId = UUID.fromString(id)
         if (id != null) {
-            // Mengakses data campground berdasarkan id
-            // val campground = MainActivity.listCampgrounds.firstOrNull { cmp -> cmp.id == UUID.fromString(id) }
-            val campground = dbHelper.findCampgroundById(UUID.fromString(id))
-            if (campground != null) {
-                editName.setText(campground.name)
-                editLocation.setText(campground.location)
-                editAddress.setText(campground.address)
-                editPrice.setText(campground.price.toString())
-                editDescription.setText(campground.description)
-                editImageUrl.setText(campground.imageUrl)
-                btnSave.setText(R.string.update)
-                selectedId = campground.id
+            campgroundRepository.getCampgroundById(UUID.fromString(id)).observe(this, Observer {
+                    campground -> if (campground != null) {
+                    editName.setText(campground.name)
+                    editLocation.setText(campground.location)
+                    editAddress.setText(campground.address)
+                    editPrice.setText(campground.price.toString())
+                    editDescription.setText(campground.description)
+                    editImageUrl.setText(campground.imageUrl)
+                    btnSave.setText(R.string.update)
+                    selectedId = campground.id
 
-                actionBar?.title = "Campground Update"
-            }
+                    actionBar?.title = "Campground Update"
+                }
+            })
         }
 
         btnSave.setOnClickListener(this)
@@ -86,11 +93,21 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
                 builder.setMessage("Are you sure want to delete campground data?")
                     .setCancelable(false)
                     .setPositiveButton("Sure") { dialog, id ->
-                        // Menghapus data campground
-                        // val selectedIndex = MainActivity.listCampgrounds.indexOfFirst { cmp -> cmp.id == selectedId }
-                        // MainActivity.listCampgrounds.removeAt(selectedIndex)
-                        dbHelper.deleteCampground(UUID.fromString(selectedId.toString()))
-                        finish()
+                        showLoading("Deleting campground")
+                        campgroundRepository.deleteCampground(UUID.fromString(selectedId.toString())).observe(this, Observer {
+                            deletedData -> if (deletedData != null ) {
+                                progressDialog?.dismiss()
+                                finish()
+                            }
+                            else {
+                                progressDialog?.dismiss()
+                                Toast.makeText(
+                                    this,
+                                    "Failed to update data campground",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        })
                     }
                     .setNegativeButton("Cancel") { dialog, id -> }
                 var alertDilog = builder.create()
@@ -137,34 +154,60 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
                 // Penyimpanan data campground
                 if (!invalidEntries) {
                     // Membuat object campground baru
-                    val newCampground = Campground(
+                    var newCampground = Campground(
                         id = UUID.randomUUID(),
                         name = inputName,
                         location = inputLocation,
                         address = inputAddress,
                         price = inputPrice.toInt(),
-                        imageUrl = inputImageUrl,
+                        imageUrl = null,
                         description = inputDescription,
                         latitude = null,
                         longitude = null,
                         creatorUsername = null,
                         creatorId = null
                     )
-
-                    if (selectedId != null) {
-                        // Pembaharuan data campground
-                        // val selectedIndex = MainActivity.listCampgrounds.indexOfFirst { cmp -> cmp.id == selectedId }
-                        // MainActivity.listCampgrounds[selectedIndex] = newCampground.copy(id = selectedId)
-                        dbHelper.updateCampground(newCampground.copy(id = selectedId))
-                    } else {
-                        // Menyimpan campground baru
-                        // MainActivity.listCampgrounds.add(newCampground)
-                        dbHelper.insertCampground(newCampground)
+                    if (inputImageUrl.isNotEmpty()) {
+                        newCampground = newCampground.copy(imageUrl = inputImageUrl)
                     }
 
-                    finish()
+                    if (selectedId != null) {
+                        showLoading("Updating campground")
+                        campgroundRepository.updateCampground(UUID.fromString(selectedId.toString()), newCampground).observe(this, Observer {
+                            updatedData -> if (updatedData != null) {
+                                progressDialog?.dismiss()
+                                finish()
+                            } else {
+                                progressDialog?.dismiss()
+                                Toast.makeText(
+                                    this,
+                                    "Failed to update data campground",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        })
+                    } else {
+                        showLoading("Saving campground")
+                        campgroundRepository.addCampground(newCampground).observe(this, Observer {
+                            createdData -> if (createdData != null) {
+                                progressDialog?.dismiss()
+                                finish()
+                            }
+                            else {
+                                progressDialog?.dismiss()
+                                Toast.makeText(
+                                    this,
+                                    "Failed to update data campground",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        })
+                    }
                 }
             }
         }
+    }
+    private fun showLoading(msg: String) {
+        progressDialog = ProgressDialog.show(this, "Processing Data", msg)
     }
 }

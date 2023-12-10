@@ -1,8 +1,14 @@
-package com.ca214.kemah.data.models.requests
+package com.ca214.kemah.data.models.responses
 
 import com.google.gson.annotations.SerializedName
+import java.util.UUID
 
-data class CampgroundRequest(
+data class CampgroundDetailResponse(
+
+    @SerializedName("id")
+    val id: UUID = UUID.randomUUID(),
+    @SerializedName("creator")
+    val creator: UserResponse,
     @SerializedName("name")
     val name: String = "",
     @SerializedName("location")
@@ -14,9 +20,11 @@ data class CampgroundRequest(
     @SerializedName("description")
     val description: String = "",
     @SerializedName("imageUrl")
-    val imageUrl: String? = null,
+    val imageUrl: String = "",
     @SerializedName("longitude")
-    val longitude: Double? = 0.0,
+    val longitude: Double = 0.0,
     @SerializedName("latitude")
-    val latitude: Double? = 0.0,
+    val latitude: Double = 0.0,
+    @SerializedName("comments")
+    val comments: List<CommentResponse>
 )

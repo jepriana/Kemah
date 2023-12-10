@@ -23,7 +23,7 @@ object ApiConfig {
             .addInterceptor(interceptor)
             .addInterceptor { chain ->
                 val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyM2M2ZjM0MC1kYTkzLTQ5MWEtYmUzNS02NDZhNjllYThkMmIiLCJ1bmlxdWVfbmFtZSI6ImplcHJpIiwidG9rZW5fdHlwZSI6IkFjY2VzcyIsInJvbGUiOiJVc2VyIiwibmJmIjoxNzAxNjgzMjE1LCJleHAiOjE3MDE3Njk2MTUsImlhdCI6MTcwMTY4MzIxNX0.I50BrPatwqPL-jcdZYfv9uozzlsm_AsHEiXjQPjZvuvOD06GxQrJnFzt7t1ZW1b3BoPyw1XrmZ6czWNA95QC1g")
+                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJjYmU0NWM4NS1kZDQ4LTQyOWItODVlNi0xYTc4MTBkNjYzZDEiLCJ1bmlxdWVfbmFtZSI6ImplcHJpIiwidG9rZW5fdHlwZSI6IkFjY2VzcyIsInJvbGUiOiJVc2VyIiwibmJmIjoxNzAyMjA4Nzk0LCJleHAiOjE3MDIyOTUxOTQsImlhdCI6MTcwMjIwODc5NH0.i2kOgq-SQKwdu3c5pXeXQdOFwY1FVyS3Lk9clUiBTvWd_HMJOAQUgvhiZLl4L_e3T7WrIQk_Nh6mwLcvj2gRZw")
                     .build()
                 chain.proceed(newRequest)
             }
@@ -32,11 +32,17 @@ object ApiConfig {
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
 
+//        fun<T> buildService(service: Class<T>): T {
+//            return retrofit.create(service)
+//        }
+
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()
+
+
     }
 
     val instanceRetrofit: ApiService get() = client.create(ApiService::class.java)

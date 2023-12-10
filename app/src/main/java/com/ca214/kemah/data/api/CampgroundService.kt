@@ -1,6 +1,7 @@
 package com.ca214.kemah.data.api
 
 import com.ca214.kemah.data.models.requests.CampgroundRequest
+import com.ca214.kemah.data.models.responses.CampgroundDetailResponse
 import com.ca214.kemah.data.models.responses.CampgroundResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -25,7 +26,7 @@ interface CampgroundService {
     @GET("campgrounds/{id}")
     fun getCampgroundById(
         @Path("id") id: UUID
-    ) : Call<CampgroundResponse?>
+    ) : Call<CampgroundDetailResponse?>
 
     @PUT("campgrounds/{id}")
     fun updateCampground(
