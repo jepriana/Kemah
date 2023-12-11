@@ -44,6 +44,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         editPassword = findViewById(R.id.edit_password)
 
         btnLogin.setOnClickListener(this)
+        btnRegister.setOnClickListener(this)
     }
 
     fun navigateToMainActivity() {
@@ -55,6 +56,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when(view?.id) {
+            R.id.button_register -> {
+                val navigatorToRegister = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(navigatorToRegister)
+            }
             R.id.button_login -> {
                 // Mengambil data dari text entry
                 val inputEmail = editEmail.text.toString().trim()

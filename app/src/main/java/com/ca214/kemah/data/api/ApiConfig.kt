@@ -20,6 +20,12 @@ object ApiConfig {
 
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(interceptor)
+            .addInterceptor { chain ->
+                val newRequest = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJjYmU0NWM4NS1kZDQ4LTQyOWItODVlNi0xYTc4MTBkNjYzZDEiLCJ1bmlxdWVfbmFtZSI6ImplcHJpIiwidG9rZW5fdHlwZSI6IkFjY2VzcyIsInJvbGUiOiJVc2VyIiwibmJmIjoxNzAyMjkyMzg3LCJleHAiOjE3MDIzNzg3ODcsImlhdCI6MTcwMjI5MjM4N30.sgf6N4MdnEF9AoPCvMTWhzJbmpCDotnZwvtOc9KzSGTdMg7IvbojOJPgxj9QfnFnGxImaVXFA887Fr1wwj6RUg")
+                    .build()
+                chain.proceed(newRequest)
+            }
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -33,4 +39,5 @@ object ApiConfig {
     }
 
     val instanceRetrofit: ApiService get() = client.create(ApiService::class.java)
+    val instanceCampgroundRetrofit : CampgroundService get() = client.create(CampgroundService::class.java)
 }

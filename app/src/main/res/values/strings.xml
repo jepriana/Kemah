@@ -4,7 +4,8 @@
     <string name="register">Register</string>
     <string name="email_hint">user@kemah.com</string>
     <string name="pass_hint">Your secret password</string>
-    <string name="username">Username / Email Address</string>
+    <string name="username">Username</string>
+    <string name="email">Email Address</string>
     <string name="password">Password</string>
     <string name="campground_name">Campground Name</string>
     <string name="campground_location">Campground Location</string>

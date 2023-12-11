@@ -2,7 +2,7 @@ package com.ca214.kemah.data.models
 
 import java.util.UUID
 
-data class Campground(
+data class CampgroundDetail(
     val id: UUID,
     val name: String,
     val location: String,
@@ -12,6 +12,6 @@ data class Campground(
     val imageUrl: String?,
     val longitude: Double?,
     val latitude: Double?,
-    val creatorId: UUID,
-    val creatorUsername: String
+    val creator: Creator?,
+    val comments: List<Comment>
 )

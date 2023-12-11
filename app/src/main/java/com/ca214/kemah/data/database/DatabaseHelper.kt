@@ -11,7 +11,7 @@ import java.util.UUID
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
         private const val DATABASE_NAME = "mykemah.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
         private const val TABLE_FAVORITE_CAMP = "favorite_camp"
         private const val COLUMN_ID = "id"
         private const val COLUMN_NAME = "name"
@@ -20,6 +20,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val COLUMN_PRICE = "price"
         private const val COLUMN_DESCRIPTION = "description"
         private const val COLUMN_IMAGE_URL = "image_url"
+        private const val COLUMN_LONGITUDE = "longitude"
+        private const val COLUMN_LATITUDE = "latitude"
+        private const val COLUMN_CREATOR_ID = "creator_id"
+        private const val COLUMN_CREATOR_USERNAME = "creator_username"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -30,6 +34,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 "$COLUMN_ADDRESS TEXT," +
                 "$COLUMN_PRICE INT," +
                 "$COLUMN_DESCRIPTION TEXT," +
+                "$COLUMN_LONGITUDE REAL," +
+                "$COLUMN_LATITUDE REAL," +
+                "$COLUMN_CREATOR_ID TEXT," +
+                "$COLUMN_CREATOR_USERNAME TEXT," +
                 "$COLUMN_IMAGE_URL TEXT)"
         db?.execSQL(query)
     }
@@ -97,7 +105,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADDRESS)),
                     description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
                     imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL)),
-                    price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE))
+                    price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE)),
+                    longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LONGITUDE)),
+                    latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LATITUDE)),
+                    creatorId = UUID.fromString(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATOR_ID))),
+                    creatorUsername = cursor.getString(cursor.getColumnIndexOrThrow(
+                        COLUMN_CREATOR_USERNAME)),
                 )
                 campgrounds.add(campground)
             } while (cursor.moveToNext())
@@ -121,7 +134,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADDRESS)),
                 description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
                 imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL)),
-                price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE))
+                price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE)),
+                longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LONGITUDE)),
+                latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LATITUDE)),
+                creatorId = UUID.fromString(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATOR_ID))),
+                creatorUsername = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_CREATOR_USERNAME)),
             )
         }
         cursor.close()
