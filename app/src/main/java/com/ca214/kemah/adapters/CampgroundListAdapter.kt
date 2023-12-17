@@ -15,12 +15,13 @@ import com.ca214.kemah.CampgroundEntryActivity
 import com.ca214.kemah.MainActivity
 import com.ca214.kemah.R
 import com.ca214.kemah.data.models.Campground
+import com.ca214.kemah.utils.Constants.EXTRA_CAMPGROUND_ID
 
 class CampgroundListAdapter(private val listCampgrounds: ArrayList<Campground>) : Adapter<CampgroundListAdapter.ListViewHolder>() {
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgCampgroundIllustration: ImageView = itemView.findViewById(R.id.img_campground_row)
-        val tvCampgroundName: TextView = itemView.findViewById(R.id.text_campground_row_name)
-        val tvCampgroundLocation: TextView = itemView.findViewById(R.id.text_campground_row_location)
+        val tvCampgroundName: TextView = itemView.findViewById(R.id.text_comment_author)
+        val tvCampgroundLocation: TextView = itemView.findViewById(R.id.text_comment_content)
         val tvCampgroundPrice: TextView = itemView.findViewById(R.id.text_campground_row_price)
     }
 
@@ -46,7 +47,7 @@ class CampgroundListAdapter(private val listCampgrounds: ArrayList<Campground>) 
 
         holder.itemView.setOnClickListener {
             var openCampgroundDetail = Intent(holder.itemView.context, CampgroundDetailActivity::class.java)
-            openCampgroundDetail.putExtra(MainActivity.EXTRA_CAMPGROUND_ID, campground.id.toString())
+            openCampgroundDetail.putExtra(EXTRA_CAMPGROUND_ID, campground.id.toString())
             holder.itemView.context.startActivity(openCampgroundDetail)
         }
 
@@ -56,7 +57,7 @@ class CampgroundListAdapter(private val listCampgrounds: ArrayList<Campground>) 
                 .setCancelable(false)
                 .setPositiveButton("Sure") { dialog, id ->
                     var openCampgroundEntry = Intent(holder.itemView.context, CampgroundEntryActivity::class.java)
-                    openCampgroundEntry.putExtra(MainActivity.EXTRA_CAMPGROUND_ID, campground.id.toString())
+                    openCampgroundEntry.putExtra(EXTRA_CAMPGROUND_ID, campground.id.toString())
                     holder.itemView.context.startActivity(openCampgroundEntry)
                 }
                 .setNegativeButton("Cancel") { dialog, id -> }

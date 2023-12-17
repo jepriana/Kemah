@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,22 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ca214.kemah.adapters.CampgroundGridAdapter
 import com.ca214.kemah.adapters.CampgroundListAdapter
-import com.ca214.kemah.data.api.ApiConfig
 import com.ca214.kemah.data.database.DatabaseHelper
 import com.ca214.kemah.data.models.Campground
-import com.ca214.kemah.data.models.responses.CampgroundResponse
 import com.ca214.kemah.data.repositories.CampgroundRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
-        var EXTRA_CAMPGROUND_ID = "extra_campground_id"
-        var SHARED_PREFERENCES_NAME = "KemahSP"
-        val ACCESS_TOKEN = "accessToken"
-        val REFRESH_TOKEN = "refreshToken"
         var listCampgrounds = ArrayList<Campground>()
     }
 

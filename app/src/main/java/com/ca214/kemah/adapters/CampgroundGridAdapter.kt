@@ -15,6 +15,7 @@ import com.ca214.kemah.CampgroundEntryActivity
 import com.ca214.kemah.MainActivity
 import com.ca214.kemah.R
 import com.ca214.kemah.data.models.Campground
+import com.ca214.kemah.utils.Constants.EXTRA_CAMPGROUND_ID
 
 class CampgroundGridAdapter(private val listCampgrounds: ArrayList<Campground>) : Adapter<CampgroundGridAdapter.ListViewHolder>() {
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -44,7 +45,7 @@ class CampgroundGridAdapter(private val listCampgrounds: ArrayList<Campground>) 
 
         holder.itemView.setOnClickListener {
             var openCampgroundDetail = Intent(holder.itemView.context, CampgroundDetailActivity::class.java)
-            openCampgroundDetail.putExtra(MainActivity.EXTRA_CAMPGROUND_ID, campground.id.toString())
+            openCampgroundDetail.putExtra(EXTRA_CAMPGROUND_ID, campground.id.toString())
             holder.itemView.context.startActivity(openCampgroundDetail)
         }
 
@@ -54,7 +55,7 @@ class CampgroundGridAdapter(private val listCampgrounds: ArrayList<Campground>) 
                 .setCancelable(false)
                 .setPositiveButton("Sure") { dialog, id ->
                     var openCampgroundEntry = Intent(holder.itemView.context, CampgroundEntryActivity::class.java)
-                    openCampgroundEntry.putExtra(MainActivity.EXTRA_CAMPGROUND_ID, campground.id.toString())
+                    openCampgroundEntry.putExtra(EXTRA_CAMPGROUND_ID, campground.id.toString())
                     holder.itemView.context.startActivity(openCampgroundEntry)
                 }
                 .setNegativeButton("Cancel") { dialog, id -> }

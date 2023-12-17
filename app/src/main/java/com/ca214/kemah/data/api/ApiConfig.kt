@@ -1,7 +1,7 @@
 package com.ca214.kemah.data.api
 
-import android.content.Context
-import com.ca214.kemah.MainActivity
+import com.ca214.kemah.utils.Constants.BASE_URL
+import com.ca214.kemah.utils.TokenManager
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,8 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiConfig {
-    private const val BASE_URL = "https://kemah-api-ezyppnm64a-as.a.run.app/"
-
     private val client: Retrofit get() {
         val gson = GsonBuilder()
             .setLenient()
@@ -23,7 +21,7 @@ object ApiConfig {
             .addInterceptor(interceptor)
             .addInterceptor { chain ->
                 val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJjYmU0NWM4NS1kZDQ4LTQyOWItODVlNi0xYTc4MTBkNjYzZDEiLCJ1bmlxdWVfbmFtZSI6ImplcHJpIiwidG9rZW5fdHlwZSI6IkFjY2VzcyIsInJvbGUiOiJVc2VyIiwibmJmIjoxNzAyMjA4Nzk0LCJleHAiOjE3MDIyOTUxOTQsImlhdCI6MTcwMjIwODc5NH0.i2kOgq-SQKwdu3c5pXeXQdOFwY1FVyS3Lk9clUiBTvWd_HMJOAQUgvhiZLl4L_e3T7WrIQk_Nh6mwLcvj2gRZw")
+                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJjYmU0NWM4NS1kZDQ4LTQyOWItODVlNi0xYTc4MTBkNjYzZDEiLCJ1bmlxdWVfbmFtZSI6ImplcHJpIiwidG9rZW5fdHlwZSI6IkFjY2VzcyIsInJvbGUiOiJVc2VyIiwibmJmIjoxNzAyODE4MTAzLCJleHAiOjE3MDI5MDQ1MDMsImlhdCI6MTcwMjgxODEwM30.pdfzu0AH400NvVmuAJqKdBh_eZE7dxUwJ6x2YPv5KVMjiyk_kr-EtrDEzrx3F7CZR_PS9efdwkwrpKPpL1DEHQ")
                     .build()
                 chain.proceed(newRequest)
             }
@@ -47,5 +45,6 @@ object ApiConfig {
 
     val instanceRetrofit: ApiService get() = client.create(ApiService::class.java)
     val instanceCampgroundService: CampgroundService get() = client.create(CampgroundService::class.java)
+    val instanceCommentService: CommentService get() = client.create(CommentService::class.java)
 
 }

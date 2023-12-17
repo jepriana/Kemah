@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.ca214.kemah.data.database.DatabaseHelper
 import com.ca214.kemah.data.models.Campground
 import com.ca214.kemah.data.repositories.CampgroundRepository
+import com.ca214.kemah.utils.Constants.EXTRA_CAMPGROUND_ID
 import java.util.UUID
 
 class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
@@ -52,7 +53,7 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
         actionBar?.title = "Campground Entry"
 
         // Mengambil index campground dari intent
-        val id = intent.getStringExtra(MainActivity.EXTRA_CAMPGROUND_ID)
+        val id = intent.getStringExtra(EXTRA_CAMPGROUND_ID)
         selectedId = UUID.fromString(id)
         if (id != null) {
             campgroundRepository.getCampgroundById(UUID.fromString(id)).observe(this, Observer {

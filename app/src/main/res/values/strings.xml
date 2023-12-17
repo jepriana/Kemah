@@ -22,4 +22,8 @@
     <string name="review">Review</string>
     <string name="display_list">Display List</string>
     <string name="display_grid">Display Grid</string>
+    <string name="author">Author</string>
+    <string name="comment">Comment</string>
+    <string name="send">Send</string>
+    <string name="write_a_review">Write a review</string>
 </resources>
