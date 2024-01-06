@@ -28,4 +28,7 @@
     <string name="send">Send</string>
     <string name="write_a_review">Write a review</string>
     <string name="no_comment">No Comment Found!</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="get_current_location">Get Current Location</string>
 </resources>

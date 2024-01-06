@@ -99,11 +99,52 @@
             android:hint="@string/campground_image_url"
             android:inputType="text" />
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/latitude" />
+
+        <EditText
+            android:id="@+id/edit_latitude"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="@string/latitude"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/longitude" />
+
+        <EditText
+            android:id="@+id/edit_longitude"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="@string/longitude"
+            android:inputType="numberDecimal" />
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"/>
+
+        <Button
+            android:id="@+id/button_get_current_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/get_current_location"
+            android:textColorLink="#FFFFFF"
+            app:icon="@drawable/baseline_add_location_24" />
+
         <Button
             android:id="@+id/button_save"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="16dp"
             android:text="@string/save" />
     </LinearLayout>
 </ScrollView>

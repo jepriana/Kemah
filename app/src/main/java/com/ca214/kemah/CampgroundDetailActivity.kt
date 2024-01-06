@@ -2,6 +2,7 @@ package com.ca214.kemah
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -11,11 +12,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.ca214.kemah.data.models.Campground
 import com.ca214.kemah.data.models.CampgroundDetail
 import com.ca214.kemah.data.repositories.CampgroundRepository
 import com.ca214.kemah.utils.Constants.EXTRA_CAMPGROUND_ID
 import com.ca214.kemah.utils.TokenManager
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 import java.util.UUID
 
 class CampgroundDetailActivity : AppCompatActivity(), View.OnClickListener {
@@ -36,7 +41,7 @@ class CampgroundDetailActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campground_detail)
-
+//        Configuration.getInstance().setCachePath(this.cacheDir.absolutePath)
         tokenManager = TokenManager(this)
         campgroundRepository = CampgroundRepository(tokenManager.getAccessToken().toString())
 
@@ -66,6 +71,9 @@ class CampgroundDetailActivity : AppCompatActivity(), View.OnClickListener {
                     btnReview.setText("${campground.comments.size} Comments")
                     if (!campground.imageUrl.isNullOrEmpty()) {
                         Glide.with(this).load(campground.imageUrl).into(imgCampground)
+                    }
+                    if (campground.latitude != null && campground.longitude != null) {
+                        displayLocation(campground.latitude, campground.longitude)
                     }
                     progressDialog.dismiss()
                 }
@@ -105,5 +113,21 @@ class CampgroundDetailActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+    private fun displayLocation(latitude: Double, longitude: Double) {
+        // Acquire a reference to the system Location Manager
+        val mapView = findViewById<MapView>(R.id.map_view)
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.setMultiTouchControls(true)
+        val geoPoint = GeoPoint(latitude, longitude)
+        val mapController = mapView.controller
+        mapController.setZoom(15.0)
+        mapController.setCenter(geoPoint)
+
+        // Add a marker to the map
+        val marker = Marker(mapView)
+        marker.position = geoPoint
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        mapView.overlays.add(marker)
     }
 }
