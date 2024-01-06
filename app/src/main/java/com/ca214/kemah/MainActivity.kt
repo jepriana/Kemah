@@ -17,14 +17,12 @@ import com.ca214.kemah.adapters.CampgroundListAdapter
 import com.ca214.kemah.data.database.DatabaseHelper
 import com.ca214.kemah.data.models.Campground
 import com.ca214.kemah.data.repositories.CampgroundRepository
+import com.ca214.kemah.utils.TokenManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.UUID
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
-        var EXTRA_CAMPGROUND_ID = "extra_campground_id"
-        var SHARED_PREFERENCES_NAME = "KemahSP"
-        val ACCESS_TOKEN = "accessToken"
-        val REFRESH_TOKEN = "refreshToken"
         var listCampgrounds = ArrayList<Campground>()
     }
 
@@ -32,13 +30,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var rvCampgroundList: RecyclerView
     private lateinit var dbHelper: DatabaseHelper
     private lateinit var campgroundRepository: CampgroundRepository
+    private lateinit var tokenManager: TokenManager
+    private lateinit var userId: UUID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         dbHelper = DatabaseHelper(this)
-        campgroundRepository = CampgroundRepository()
+        tokenManager = TokenManager(this)
+        campgroundRepository = CampgroundRepository(tokenManager.getAccessToken().toString())
+        userId = UUID.fromString(tokenManager.getUserId())
 
         fabAddCampground = findViewById(R.id.fab_add_campground)
         rvCampgroundList = findViewById(R.id.rv_campgrounds)
@@ -82,13 +84,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun showCampgroundList() {
         rvCampgroundList.layoutManager = LinearLayoutManager(this)
-        val campgroundListAdapter = CampgroundListAdapter(listCampgrounds)
+        val campgroundListAdapter = CampgroundListAdapter(listCampgrounds, userId)
         rvCampgroundList.adapter = campgroundListAdapter
     }
 
     private fun showCampgroundGrid() {
         rvCampgroundList.layoutManager = GridLayoutManager(this, 2)
-        val campgroundGridAdapter = CampgroundGridAdapter(listCampgrounds)
+        val campgroundGridAdapter = CampgroundGridAdapter(listCampgrounds, userId)
         rvCampgroundList.adapter = campgroundGridAdapter
     }
 

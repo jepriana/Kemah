@@ -20,6 +20,8 @@ import com.ca214.kemah.data.database.DatabaseHelper
 import com.ca214.kemah.data.models.Campground
 import com.ca214.kemah.data.models.requests.CampgroundRequest
 import com.ca214.kemah.data.repositories.CampgroundRepository
+import com.ca214.kemah.utils.Constants.EXTRA_CAMPGROUND_ID
+import com.ca214.kemah.utils.TokenManager
 import java.util.UUID
 
 class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
@@ -34,13 +36,15 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var dbHelper: DatabaseHelper
     private lateinit var campgroundRepository: CampgroundRepository
     private var progressDialog: ProgressDialog? = null
+    private lateinit var tokenManager: TokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campground_entry)
 
         dbHelper = DatabaseHelper(this)
-        campgroundRepository = CampgroundRepository()
+        tokenManager = TokenManager(this)
+        campgroundRepository = CampgroundRepository(tokenManager.getAccessToken().toString())
 
         editName = findViewById(R.id.edit_name)
         editLocation = findViewById(R.id.edit_location)
@@ -54,7 +58,7 @@ class CampgroundEntryActivity : AppCompatActivity(), View.OnClickListener {
         actionBar?.title = "Campground Entry"
 
         // Mengambil id campground dari intent
-        val id = intent.getStringExtra(MainActivity.EXTRA_CAMPGROUND_ID)
+        val id = intent.getStringExtra(EXTRA_CAMPGROUND_ID)
         if (id != null) {
             selectedId = UUID.fromString(id)
             showLoadingDialog("Get existing campground")

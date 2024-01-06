@@ -12,6 +12,10 @@ import android.widget.Toast
 import com.ca214.kemah.data.api.ApiConfig
 import com.ca214.kemah.data.models.requests.LoginRequest
 import com.ca214.kemah.data.models.responses.LoginResponse
+import com.ca214.kemah.utils.Constants.ACCESS_TOKEN
+import com.ca214.kemah.utils.Constants.REFRESH_TOKEN
+import com.ca214.kemah.utils.Constants.SHARED_PREFERENCES_NAME
+import com.ca214.kemah.utils.TokenManager
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,16 +28,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var editEmail: EditText
     private lateinit var editPassword: EditText
 
-    // Deklarasi object shared preferences
-    lateinit var sharedPreferences: SharedPreferences
+    // Deklarasi object token manager
+    lateinit var tokenManager: TokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Membentuk object shared preferences
-        sharedPreferences = getSharedPreferences(MainActivity.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-        val accessToken = sharedPreferences.getString(MainActivity.ACCESS_TOKEN, null)
+        // Membentuk object token manager
+        tokenManager = TokenManager(this)
+        val accessToken = tokenManager.getAccessToken()
         if (accessToken != null) {
             navigateToMainActivity()
         }
@@ -91,10 +95,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                                 if (response.isSuccessful) {
                                     val data = response.body()
                                     if (data != null) {
-                                        val editor = sharedPreferences.edit()
-                                        editor.putString(MainActivity.ACCESS_TOKEN, data.accessToken)
-                                        editor.putString(MainActivity.REFRESH_TOKEN, data.refreshToken)
-                                        editor.commit()
+                                        tokenManager.saveAccessToken(data.accessToken)
+                                        tokenManager.saveRefreshToken(data.refreshToken)
 
                                         Toast.makeText(this@LoginActivity, "Login Success", Toast.LENGTH_LONG).show()
                                         navigateToMainActivity()

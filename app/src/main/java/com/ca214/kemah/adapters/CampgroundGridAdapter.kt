@@ -15,8 +15,10 @@ import com.ca214.kemah.CampgroundEntryActivity
 import com.ca214.kemah.MainActivity
 import com.ca214.kemah.R
 import com.ca214.kemah.data.models.Campground
+import com.ca214.kemah.utils.Constants.EXTRA_CAMPGROUND_ID
+import java.util.UUID
 
-class CampgroundGridAdapter(private val listCampgrounds: ArrayList<Campground>) : Adapter<CampgroundGridAdapter.ListViewHolder>() {
+class CampgroundGridAdapter(private val listCampgrounds: ArrayList<Campground>, private val userId: UUID) : Adapter<CampgroundGridAdapter.ListViewHolder>() {
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgCampgroundIllustration: ImageView = itemView.findViewById(R.id.img_campground_grid)
         val tvCampgroundName: TextView = itemView.findViewById(R.id.text_campground_grid_name)
@@ -44,24 +46,27 @@ class CampgroundGridAdapter(private val listCampgrounds: ArrayList<Campground>) 
 
         holder.itemView.setOnClickListener {
             var openCampgroundDetail = Intent(holder.itemView.context, CampgroundDetailActivity::class.java)
-            openCampgroundDetail.putExtra(MainActivity.EXTRA_CAMPGROUND_ID, campground.id.toString())
+            openCampgroundDetail.putExtra(EXTRA_CAMPGROUND_ID, campground.id.toString())
             holder.itemView.context.startActivity(openCampgroundDetail)
         }
 
-        holder.itemView.setOnLongClickListener {
-            var builder = AlertDialog.Builder(holder.itemView.context)
-            builder.setMessage("Are you sure want to update campground data?")
-                .setCancelable(false)
-                .setPositiveButton("Sure") { dialog, id ->
-                    var openCampgroundEntry = Intent(holder.itemView.context, CampgroundEntryActivity::class.java)
-                    openCampgroundEntry.putExtra(MainActivity.EXTRA_CAMPGROUND_ID, campground.id.toString())
-                    holder.itemView.context.startActivity(openCampgroundEntry)
-                }
-                .setNegativeButton("Cancel") { dialog, id -> }
-            var alertDilog = builder.create()
-            alertDilog.show()
+        if (campground.creatorId == userId) {
+            holder.itemView.setOnLongClickListener {
+                val builder = AlertDialog.Builder(holder.itemView.context)
+                builder.setMessage("Are you sure want to update campground data?")
+                    .setCancelable(false)
+                    .setPositiveButton("Sure") { dialog, id ->
+                        val openCampgroundEntry =
+                            Intent(holder.itemView.context, CampgroundEntryActivity::class.java)
+                        openCampgroundEntry.putExtra(EXTRA_CAMPGROUND_ID, campground.id.toString())
+                        holder.itemView.context.startActivity(openCampgroundEntry)
+                    }
+                    .setNegativeButton("Cancel") { dialog, id -> }
+                val alertDialog = builder.create()
+                alertDialog.show()
 
-            true
+                true
+            }
         }
     }
 

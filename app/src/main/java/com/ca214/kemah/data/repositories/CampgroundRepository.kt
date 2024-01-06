@@ -16,14 +16,15 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.UUID
 
-class CampgroundRepository {
+class CampgroundRepository (authToken: String) {
     private val apiService = ApiConfig.instanceCampgroundRetrofit
+    private val bearerToken = "Bearer $authToken"
 
     fun getAllCampgrounds() : LiveData<List<Campground>> {
         val data = MutableLiveData<List<Campground>>()
         try {
             // API call untuk GET semua data campgrounds
-            apiService.getAllCampgrounds().enqueue(object : Callback<List<CampgroundResponse>> {
+            apiService.getAllCampgrounds(bearerToken).enqueue(object : Callback<List<CampgroundResponse>> {
                 override fun onResponse(
                     call: Call<List<CampgroundResponse>>,
                     response: Response<List<CampgroundResponse>>
@@ -64,7 +65,7 @@ class CampgroundRepository {
     fun getCampgroundById(id: UUID) : LiveData<CampgroundDetail> {
         val data = MutableLiveData<CampgroundDetail>()
 
-        apiService.getCampgroundById(id).enqueue(object : Callback<CampgroundDetailResponse> {
+        apiService.getCampgroundById(bearerToken, id).enqueue(object : Callback<CampgroundDetailResponse> {
             override fun onResponse(
                 call: Call<CampgroundDetailResponse>,
                 response: Response<CampgroundDetailResponse>
@@ -114,7 +115,7 @@ class CampgroundRepository {
     fun addCampground(campground: CampgroundRequest): LiveData<Campground> {
         val data = MutableLiveData<Campground>()
 
-        apiService.addCampground(campground).enqueue(object : Callback<CampgroundResponse> {
+        apiService.addCampground(bearerToken, campground).enqueue(object : Callback<CampgroundResponse> {
             override fun onResponse(
                 call: Call<CampgroundResponse>,
                 response: Response<CampgroundResponse>
@@ -150,7 +151,7 @@ class CampgroundRepository {
 
     fun updateCampground(id: UUID, updatedCampground: CampgroundRequest) : LiveData<Boolean> {
         val data = MutableLiveData<Boolean>()
-        apiService.updateCampground(id, updatedCampground).enqueue(
+        apiService.updateCampground(bearerToken, id, updatedCampground).enqueue(
             object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     data.value = response.isSuccessful
@@ -170,7 +171,7 @@ class CampgroundRepository {
     fun deleteCampground(id: UUID) : LiveData<Boolean> {
         val data = MutableLiveData<Boolean>()
 
-        apiService.deleteCampground(id).enqueue(
+        apiService.deleteCampground(bearerToken, id).enqueue(
             object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     data.value = response.isSuccessful
